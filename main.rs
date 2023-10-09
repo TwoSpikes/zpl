@@ -10,13 +10,62 @@ fn get(filename: &str) -> std::io::Result<String> {
 }
 
 #[derive(Debug)]
+enum CharType {
+    ALPHA,
+    NUM,
+    SOME_SPACE,
+    NEWLINE,
+    SPEC,
+}
+fn char_type(c: char) -> CharType {
+use crate::CharType::*;
+    return if c >= 'a' && c <= 'z' ||
+              c >= 'A' && c <= 'Z' ||
+              c >= 'а' && c <= 'я' ||
+              c >= 'А' && c <= 'Я' {
+        ALPHA
+    } else if c >= '0' && c <= '9' {
+        NUM
+    } else if c == ' ' || c == '\t' {
+        SOME_SPACE
+    } else if c == '\n' || c == '\r' || c == '\x0b' || c == '\x0c' {
+        NEWLINE
+    } else {
+        SPEC
+    };
+}
+
+#[derive(Debug)]
+enum TokType {
+    NUM,
+}
+#[derive(Debug)]
 struct Tok {
     loc: Loc,
+    tokType: TokType,
     val: String,
 }
+/* **********************************
+ * Hello, world!                    *
+ *      |<     |                    *
+ * '   `" '   `"                    *
+ *                                  *
+ * *********************************/
 fn lex(string: &str) -> Vec<Tok> {
-    let splitted = string.split_whitespace();
-    let result: Vec<Tok> = splitted.map(|x| Tok { loc: Loc { line: 1488, index: 1488, filename: String::from("[null]") }, val: String::from(x) }).collect();
+    let mut result = Vec::<Tok>::new();
+    let mut string = String::from(string);
+    let mut string = string.chars();
+
+    let mut buf = String::new();
+    let mut ind: u32 = 0;
+    while let Some(c) = string.nth(0) {
+        dbg!(c);
+        match char_type(c) {
+            _ => todo!(),
+        }
+        ind += 1;
+    }
+    todo!();
     return result;
 }
 
