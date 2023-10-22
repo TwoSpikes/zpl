@@ -2,7 +2,7 @@
 struct Loc {
     line: u32,
     index: u32,
-    filename: String,
+    filename: Option<Box<String>>,
 }
 fn get(filename: &str) -> std::io::Result<String> {
     let got = std::fs::read_to_string(filename)?;
@@ -52,7 +52,7 @@ struct Tok {
  * '   `" '   `"                    *
  *                                  *
  * *********************************/
-fn lex(string: &str) -> Vec<Tok> {
+fn lex(string: &str, filename: Option<Box<String>>) -> Vec<Tok> {
     let mut result = Vec::<Tok>::new();
     let mut string = String::from(string);
     let mut string = string.chars();
@@ -98,7 +98,7 @@ use State::*;
                         prevloc = Some(Loc {
                             line,
                             index,
-                            filename: String::from("unknown"),
+                            filename: filename.clone(),
                         });
                         state = Alpha;
                     },
@@ -129,7 +129,7 @@ use State::*;
                         prevloc = Some(Loc {
                             line,
                             index,
-                            filename: String::from("unknown"),
+                            filename: filename.clone(),
                         });
                         state = Spec;
                     },
@@ -154,7 +154,7 @@ use State::*;
                         prevloc = Some(Loc {
                             line,
                             index,
-                            filename: String::from("unknown"),
+                            filename: filename.clone(),
                         });
                         state = Alpha;
                     },
@@ -182,7 +182,7 @@ use State::*;
                         prevloc = Some(Loc {
                             line,
                             index,
-                            filename: String::from("unknown"),
+                            filename: filename.clone(),
                         });
                         state = Alpha;
                     },
@@ -192,7 +192,7 @@ use State::*;
                         prevloc = Some(Loc {
                             line,
                             index,
-                            filename: String::from("unknown"),
+                            filename: filename.clone(),
                         });
                         state = Spec;
                     },
@@ -248,7 +248,7 @@ fn main() {
                 let got: String = get(i).expect(&(String::from("cannot read file ") + i));
                 println!("got: {}", got);
                 println!("trying to lex {}", i);
-                let lexed: Vec<Tok> = lex(&got);
+                let lexed: Vec<Tok> = lex(&got, Some(Box::new(i.clone())));
                 println!("lexed: {:#?}", lexed);
             }
         },
