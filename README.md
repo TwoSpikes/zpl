@@ -1,6 +1,6 @@
 # zpl
 
-zpl is experimental programming language written in Rust
+zpl is a programming language written in Rust
 
 # Quick build
 
