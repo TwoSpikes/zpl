@@ -2,5 +2,5 @@
 
 install: build
 	install ./target/release/zpl ${PREFIX}/../usr/bin/
-build: main.rs
+build:
 	cargo build --release
